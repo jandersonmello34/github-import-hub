@@ -8,6 +8,8 @@ export const Route = createFileRoute("/_authenticated/biblia")({
       { name: "description", content: "Leia a Bíblia em NVI, ACF e AA e compare versões lado a lado." },
       { property: "og:title", content: "Bíblia — Kerigma" },
       { property: "og:description", content: "Leia e compare versões da Bíblia." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: BiblePage,

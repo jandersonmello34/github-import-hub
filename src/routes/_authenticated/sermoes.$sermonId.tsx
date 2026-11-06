@@ -8,6 +8,8 @@ export const Route = createFileRoute("/_authenticated/sermoes/$sermonId")({
       { name: "description", content: "Escreva seu sermão com apoio de IA para esboço, clareza e referências." },
       { property: "og:title", content: "Editor de sermão — Kerigma" },
       { property: "og:description", content: "Escreva seu sermão com apoio de IA." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: SermonEditorPage,

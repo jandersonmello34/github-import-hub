@@ -8,6 +8,8 @@ export const Route = createFileRoute("/_authenticated/sermoes/florescer")({
       { name: "description", content: "Da ideia inicial ao primeiro rascunho de esboço, com apoio de IA." },
       { property: "og:title", content: "Florescer uma ideia — Kerigma" },
       { property: "og:description", content: "Da ideia inicial ao primeiro rascunho de esboço." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: IdeaWizardPage,

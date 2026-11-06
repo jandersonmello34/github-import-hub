@@ -8,6 +8,8 @@ export const Route = createFileRoute("/_authenticated/configuracoes")({
       { name: "description", content: "Conecte o Kerigma ao seu Holyrics." },
       { property: "og:title", content: "Configurações — Kerigma" },
       { property: "og:description", content: "Conecte o Kerigma ao seu Holyrics." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: HolyricsSettingsPage,

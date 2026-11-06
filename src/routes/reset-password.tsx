@@ -13,6 +13,8 @@ export const Route = createFileRoute("/reset-password")({
       { name: "description", content: "Defina uma nova senha para sua conta Kerigma." },
       { property: "og:title", content: "Nova senha — Kerigma" },
       { property: "og:description", content: "Defina uma nova senha para sua conta Kerigma." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: ResetPassword,

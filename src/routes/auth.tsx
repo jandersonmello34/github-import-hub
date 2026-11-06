@@ -25,6 +25,8 @@ export const Route = createFileRoute("/auth")({
       { name: "description", content: "Entre para acessar seus sermões e a projeção do Holyrics." },
       { property: "og:title", content: "Entrar — Kerigma" },
       { property: "og:description", content: "Entre para acessar seus sermões e a projeção do Holyrics." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: AuthPage,
