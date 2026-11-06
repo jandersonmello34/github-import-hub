@@ -10,7 +10,7 @@ export function splitTopics(body: string): SermonPage[] {
     const m = /^\s{0,3}#{1,3}\s+(.+?)\s*#*\s*$/.exec(line);
     if (m) {
       if (cur.heading || cur.content.trim()) pages.push(cur);
-      cur = { heading: m[1].replace(/\*\*/g, ""), content: "" };
+      cur = { heading: (m[1] ?? "").replace(/\*\*/g, ""), content: "" };
     } else cur.content += `${line}\n`;
   }
   if (cur.heading || cur.content.trim()) pages.push(cur);
@@ -20,10 +20,11 @@ export function splitTopics(body: string): SermonPage[] {
 export type VerseRef = { label: string; book: number; chapter: number; from: number; to: number };
 
 const norm = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-const ALIASES: [string, number][] = [
+const ALIAS_LIST: [string, number][] = [
   ...BOOK_NAMES.map((n, i) => [norm(n), i] as [string, number]),
   ["salmo", 18], ["sl", 18], ["cantares", 21], ["cantico dos canticos", 21], ["oseias", 27], ["miqueias", 32], ["mt", 39], ["mc", 40], ["lc", 41], ["jo", 42], ["rm", 44], ["gn", 0], ["is", 22], ["hb", 57], ["ap", 65],
-].sort((a, b) => b[0].length - a[0].length) as [string, number][];
+];
+const ALIASES = [...ALIAS_LIST].sort((a, b) => b[0].length - a[0].length);
 
 /** Finds references like "João 3:16", "1 Coríntios 13:4-7", "Salmo 23.1" in text. */
 export function findReferences(text: string): VerseRef[] {
@@ -33,7 +34,7 @@ export function findReferences(text: string): VerseRef[] {
   const out: VerseRef[] = [];
   const seen = new Set<string>();
   for (const m of src.matchAll(re)) {
-    const key = m[1].replace(/\s+/g, " ");
+    const key = (m[1] ?? "").replace(/\s+/g, " ");
     const book = ALIASES.find(([a]) => a === key)?.[1];
     if (book === undefined) continue;
     const chapter = Number(m[2]);
