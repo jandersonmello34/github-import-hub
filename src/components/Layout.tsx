@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { DictionaryPanel } from "@/components/exegesis/DictionaryPanel";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { BookOpen, BookOpenText, Languages, ScrollText, MonitorPlay, Settings, Sparkles } from "lucide-react";
+import { BookOpen, BookOpenText, Library, Languages, ScrollText, MonitorPlay, Settings, Sparkles } from "lucide-react";
 import type { ReactNode } from "react";
 
 type NavItem = {
@@ -17,6 +17,7 @@ const navItems: NavItem[] = [
   { to: "/sermoes", label: "Sermões", icon: BookOpenText, ocid: "nav.sermons.link" },
   { to: "/biblia", label: "Bíblia", icon: BookOpen, ocid: "nav.bible.link" },
   { to: "/exegese", label: "Exegese", icon: ScrollText, ocid: "nav.exegesis.link" },
+  { to: "/dicionario", label: "Dicionário", icon: Library, ocid: "nav.dictionary.link" },
   {
     to: "/projecao",
     label: "Projeção",
