@@ -5,7 +5,7 @@ describe("dicionário bíblico", () => {
     for (const e of BIBLE_DICTIONARY) expect(["Easton", "Hitchcock", "Strong"]).toContain(e.source);
   });
   it("busca sem acento e filtra por letra", () => {
-    expect(searchDictionary("belem")[0].term).toBe("Belém");
+    expect(searchDictionary("belem")[0]?.term).toBe("Belém");
     expect(searchDictionary("", "lugar", "J").map((e) => e.term)).toEqual(["Jerusalém", "Jordão"]);
   });
 });
