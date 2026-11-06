@@ -3,8 +3,21 @@ import { useSermon } from "@/hooks/useSermons";
 import { alertLevel, formatClock, type TimerAlert } from "@/lib/pulpit-timer";
 import { cn } from "@/lib/utils";
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { ArrowLeft, Loader2, Maximize, Minus, Pause, Play, Plus, RotateCcw } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { ArrowLeft, BookOpen, ChevronLeft, ChevronRight, Loader2, Maximize, Minus, Pause, Play, Plus, RotateCcw } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useBibleChapter } from "@/lib/bible";
+import { findReferences, splitTopics, type VerseRef } from "@/lib/sermon-pages";
+
+function VerseText({ r }: { r: VerseRef }) {
+  const { data, isLoading } = useBibleChapter("nvi", r.book, r.chapter);
+  const text = data?.slice(r.from - 1, r.to).map((v, i) => `${r.from + i} ${v}`).join(" ");
+  return (
+    <p className="text-sm leading-relaxed">
+      <strong className="text-primary">{r.label}</strong>{" "}
+      {isLoading ? "…" : text || "Versículo não encontrado."}
+    </p>
+  );
+}
 
 const borderClass: Record<TimerAlert, string> = {
   normal: "",
@@ -30,6 +43,22 @@ export default function PulpitPage() {
   const [running, setRunning] = useState(false);
   const [fontSize, setFontSize] = useState(22);
   const lastTick = useRef<number | null>(null);
+  const [page, setPage] = useState(0);
+  const [showVerses, setShowVerses] = useState(false);
+  const pages = useMemo(() => splitTopics(sermon?.body ?? ""), [sermon?.body]);
+  const pageCount = Math.max(pages.length, 1);
+  const current = pages[Math.min(page, pageCount - 1)];
+  const refs = useMemo(() => findReferences(`${current?.heading ?? ""}\n${current?.content ?? ""}`), [current]);
+  const go = (d: number) => setPage((p) => Math.min(pageCount - 1, Math.max(0, p + d)));
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight" || e.key === "PageDown") go(1);
+      if (e.key === "ArrowLeft" || e.key === "PageUp") go(-1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
 
   useEffect(() => {
     if (sermon) setTotal(sermon.durationMinutes * 60);
@@ -109,15 +138,39 @@ export default function PulpitPage() {
         </p>
       </header>
 
-      <main className="flex-1 overflow-y-auto px-6 py-8">
+      <main className="relative flex-1 overflow-y-auto px-16 py-8">
         <article className="mx-auto max-w-3xl">
-          <h1 className="font-display text-3xl font-semibold">{sermon.title}</h1>
-          {sermon.bibleReference && <p className="mt-1 text-primary">{sermon.bibleReference}</p>}
+          {page === 0 && <h1 className="font-display text-3xl font-semibold">{sermon.title}</h1>}
+          {page === 0 && sermon.bibleReference && <p className="mt-1 text-primary">{sermon.bibleReference}</p>}
+          {current?.heading && <h2 className="mt-4 font-display text-2xl font-semibold text-primary">{current.heading}</h2>}
           <div className="mt-6 whitespace-pre-wrap leading-relaxed" style={{ fontSize }}>
-            {sermon.body || "Este sermão ainda não tem conteúdo."}
+            {current ? current.content : "Este sermão ainda não tem conteúdo."}
           </div>
         </article>
       </main>
+      <Button size="icon" variant="outline" aria-label="Tópico anterior" disabled={page === 0}
+        className="fixed left-3 top-1/2 z-[55] size-12 rounded-full" onClick={() => go(-1)}>
+        <ChevronLeft className="size-6" />
+      </Button>
+      <Button size="icon" variant="outline" aria-label="Próximo tópico" disabled={page >= pageCount - 1}
+        className="fixed right-3 top-1/2 z-[55] size-12 rounded-full" onClick={() => go(1)}>
+        <ChevronRight className="size-6" />
+      </Button>
+
+      <footer className="border-t border-border bg-card/90 px-4 py-2 backdrop-blur">
+        <div className="mx-auto flex max-w-5xl items-center gap-3">
+          <Button size="sm" variant="outline" disabled={refs.length === 0} onClick={() => setShowVerses((v) => !v)}>
+            <BookOpen className="size-4" />
+            {showVerses ? "Esconder versículos" : `Mostrar versículos (${refs.length})`}
+          </Button>
+          <span className="ml-auto text-sm text-muted-foreground">Tópico {Math.min(page, pageCount - 1) + 1} de {pageCount}</span>
+        </div>
+        {showVerses && refs.length > 0 && (
+          <div className="mx-auto mt-2 max-h-48 max-w-5xl space-y-2 overflow-y-auto">
+            {refs.map((r) => <VerseText key={r.label} r={r} />)}
+          </div>
+        )}
+      </footer>
     </div>
   );
 }
