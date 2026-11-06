@@ -1,7 +1,9 @@
 import { SignOutButton } from "@/components/SignOutButton";
 import { cn } from "@/lib/utils";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, BookOpenText, MonitorPlay, Settings, Sparkles } from "lucide-react";
+import { DictionaryPanel } from "@/components/exegesis/DictionaryPanel";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { BookOpen, BookOpenText, Languages, ScrollText, MonitorPlay, Settings, Sparkles } from "lucide-react";
 import type { ReactNode } from "react";
 
 type NavItem = {
@@ -14,6 +16,7 @@ type NavItem = {
 const navItems: NavItem[] = [
   { to: "/sermoes", label: "Sermões", icon: BookOpenText, ocid: "nav.sermons.link" },
   { to: "/biblia", label: "Bíblia", icon: BookOpen, ocid: "nav.bible.link" },
+  { to: "/exegese", label: "Exegese", icon: ScrollText, ocid: "nav.exegesis.link" },
   {
     to: "/projecao",
     label: "Projeção",
@@ -102,6 +105,18 @@ export function Layout({ children }: { children: ReactNode }) {
               <NavLink key={item.to} item={item} />
             ))}
           </nav>
+          <Sheet>
+            <SheetTrigger asChild>
+              <button type="button" aria-label="Dicionário teológico" title="Dicionário teológico"
+                className="ml-auto rounded-lg border border-border p-2 text-muted-foreground transition-smooth hover:border-primary/50 hover:text-primary md:ml-0">
+                <Languages className="size-4" />
+              </button>
+            </SheetTrigger>
+            <SheetContent className="w-full overflow-y-auto sm:max-w-lg">
+              <SheetHeader><SheetTitle>Dicionário teológico</SheetTitle></SheetHeader>
+              <div className="mt-4"><DictionaryPanel /></div>
+            </SheetContent>
+          </Sheet>
           <div className="ml-auto hidden items-center gap-3 md:flex">
             <SignOutButton className="rounded-lg border border-border px-3 py-1.5 text-sm font-medium text-muted-foreground transition-smooth hover:border-primary/50 hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:opacity-60" />
           </div>

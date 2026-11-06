@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedBibliaRouteImport } from './routes/_authenticated/biblia'
 import { Route as AuthenticatedConfiguracoesRouteImport } from './routes/_authenticated/configuracoes'
+import { Route as AuthenticatedExegeseRouteImport } from './routes/_authenticated/exegese'
 import { Route as AuthenticatedProjecaoRouteImport } from './routes/_authenticated/projecao'
 import { Route as AuthenticatedPulpitoSermonIdRouteImport } from './routes/_authenticated/pulpito.$sermonId'
 import { Route as AuthenticatedSermoesIndexRouteImport } from './routes/_authenticated/sermoes.index'
@@ -51,6 +52,11 @@ const AuthenticatedConfiguracoesRoute =
     path: '/configuracoes',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedExegeseRoute = AuthenticatedExegeseRouteImport.update({
+  id: '/exegese',
+  path: '/exegese',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedProjecaoRoute = AuthenticatedProjecaoRouteImport.update({
   id: '/projecao',
   path: '/projecao',
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/biblia': typeof AuthenticatedBibliaRoute
   '/configuracoes': typeof AuthenticatedConfiguracoesRoute
+  '/exegese': typeof AuthenticatedExegeseRoute
   '/projecao': typeof AuthenticatedProjecaoRoute
   '/pulpito/$sermonId': typeof AuthenticatedPulpitoSermonIdRoute
   '/sermoes/$sermonId': typeof AuthenticatedSermoesSermonIdRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/biblia': typeof AuthenticatedBibliaRoute
   '/configuracoes': typeof AuthenticatedConfiguracoesRoute
+  '/exegese': typeof AuthenticatedExegeseRoute
   '/projecao': typeof AuthenticatedProjecaoRoute
   '/pulpito/$sermonId': typeof AuthenticatedPulpitoSermonIdRoute
   '/sermoes/$sermonId': typeof AuthenticatedSermoesSermonIdRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/biblia': typeof AuthenticatedBibliaRoute
   '/_authenticated/configuracoes': typeof AuthenticatedConfiguracoesRoute
+  '/_authenticated/exegese': typeof AuthenticatedExegeseRoute
   '/_authenticated/projecao': typeof AuthenticatedProjecaoRoute
   '/_authenticated/pulpito/$sermonId': typeof AuthenticatedPulpitoSermonIdRoute
   '/_authenticated/sermoes/$sermonId': typeof AuthenticatedSermoesSermonIdRoute
@@ -127,6 +136,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/biblia'
     | '/configuracoes'
+    | '/exegese'
     | '/projecao'
     | '/pulpito/$sermonId'
     | '/sermoes/$sermonId'
@@ -139,6 +149,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/biblia'
     | '/configuracoes'
+    | '/exegese'
     | '/projecao'
     | '/pulpito/$sermonId'
     | '/sermoes/$sermonId'
@@ -152,6 +163,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/biblia'
     | '/_authenticated/configuracoes'
+    | '/_authenticated/exegese'
     | '/_authenticated/projecao'
     | '/_authenticated/pulpito/$sermonId'
     | '/_authenticated/sermoes/$sermonId'
@@ -210,6 +222,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedConfiguracoesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/exegese': {
+      id: '/_authenticated/exegese'
+      path: '/exegese'
+      fullPath: '/exegese'
+      preLoaderRoute: typeof AuthenticatedExegeseRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/projecao': {
       id: '/_authenticated/projecao'
       path: '/projecao'
@@ -251,6 +270,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedBibliaRoute: typeof AuthenticatedBibliaRoute
   AuthenticatedConfiguracoesRoute: typeof AuthenticatedConfiguracoesRoute
+  AuthenticatedExegeseRoute: typeof AuthenticatedExegeseRoute
   AuthenticatedProjecaoRoute: typeof AuthenticatedProjecaoRoute
   AuthenticatedPulpitoSermonIdRoute: typeof AuthenticatedPulpitoSermonIdRoute
   AuthenticatedSermoesSermonIdRoute: typeof AuthenticatedSermoesSermonIdRoute
@@ -261,6 +281,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBibliaRoute: AuthenticatedBibliaRoute,
   AuthenticatedConfiguracoesRoute: AuthenticatedConfiguracoesRoute,
+  AuthenticatedExegeseRoute: AuthenticatedExegeseRoute,
   AuthenticatedProjecaoRoute: AuthenticatedProjecaoRoute,
   AuthenticatedPulpitoSermonIdRoute: AuthenticatedPulpitoSermonIdRoute,
   AuthenticatedSermoesSermonIdRoute: AuthenticatedSermoesSermonIdRoute,
