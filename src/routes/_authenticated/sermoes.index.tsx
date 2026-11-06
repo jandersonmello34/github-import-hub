@@ -8,6 +8,8 @@ export const Route = createFileRoute("/_authenticated/sermoes/")({
       { name: "description", content: "Organize, pesquise e prepare seus sermões." },
       { property: "og:title", content: "Sermões — Kerigma" },
       { property: "og:description", content: "Organize, pesquise e prepare seus sermões." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: SermonsPage,

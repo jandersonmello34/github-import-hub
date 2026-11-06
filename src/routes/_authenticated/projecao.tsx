@@ -8,6 +8,8 @@ export const Route = createFileRoute("/_authenticated/projecao")({
       { name: "description", content: "Controle a projeção do Holyrics durante o culto." },
       { property: "og:title", content: "Projeção Holyrics — Kerigma" },
       { property: "og:description", content: "Controle a projeção do Holyrics durante o culto." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: HolyricsPage,
