@@ -3,19 +3,29 @@ import { useSermon } from "@/hooks/useSermons";
 import { alertLevel, formatClock, type TimerAlert } from "@/lib/pulpit-timer";
 import { cn } from "@/lib/utils";
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { ArrowLeft, BookOpen, ChevronLeft, ChevronRight, Loader2, Maximize, Minus, Pause, Play, Plus, RotateCcw } from "lucide-react";
+import { ArrowLeft, BookOpen, ChevronDown, ChevronLeft, ChevronRight, Loader2, Maximize, Minus, Pause, Play, Plus, RotateCcw } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useBibleChapter } from "@/lib/bible";
+import { type BibleVersion, useBibleChapter } from "@/lib/bible";
+import { VersionSelect } from "@/components/bible/ChapterReader";
 import { findReferences, splitTopics, type VerseRef } from "@/lib/sermon-pages";
 
-function VerseText({ r }: { r: VerseRef }) {
-  const { data, isLoading } = useBibleChapter("nvi", r.book, r.chapter);
+function VerseText({ r, version }: { r: VerseRef; version: BibleVersion }) {
+  const [open, setOpen] = useState(true);
+  const { data, isLoading, isError } = useBibleChapter(version, r.book, r.chapter);
   const text = data?.slice(r.from - 1, r.to).map((v, i) => `${r.from + i} ${v}`).join(" ");
   return (
-    <p className="text-sm leading-relaxed">
-      <strong className="text-primary">{r.label}</strong>{" "}
-      {isLoading ? "…" : text || "Versículo não encontrado."}
-    </p>
+    <div className="rounded-md border border-border bg-background/60">
+      <button type="button" aria-expanded={open} onClick={() => setOpen((o) => !o)}
+        className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm font-semibold text-primary hover:bg-primary/10">
+        <ChevronDown className={cn("size-4 transition-transform", !open && "-rotate-90")} />
+        {r.label}
+      </button>
+      {open && (
+        <p className="px-3 pb-2 text-sm leading-relaxed">
+          {isLoading ? "Carregando…" : isError ? "Não foi possível carregar esta versão." : text || "Versículo não encontrado."}
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -45,6 +55,7 @@ export default function PulpitPage() {
   const lastTick = useRef<number | null>(null);
   const [page, setPage] = useState(0);
   const [showVerses, setShowVerses] = useState(false);
+  const [version, setVersion] = useState<BibleVersion>("nvi");
   const pages = useMemo(() => splitTopics(sermon?.body ?? ""), [sermon?.body]);
   const pageCount = Math.max(pages.length, 1);
   const current = pages[Math.min(page, pageCount - 1)];
@@ -163,11 +174,12 @@ export default function PulpitPage() {
             <BookOpen className="size-4" />
             {showVerses ? "Esconder versículos" : `Mostrar versículos (${refs.length})`}
           </Button>
+          {showVerses && <VersionSelect value={version} onChange={setVersion} label="Versão da Bíblia" />}
           <span className="ml-auto text-sm text-muted-foreground">Tópico {Math.min(page, pageCount - 1) + 1} de {pageCount}</span>
         </div>
         {showVerses && refs.length > 0 && (
-          <div className="mx-auto mt-2 max-h-48 max-w-5xl space-y-2 overflow-y-auto">
-            {refs.map((r) => <VerseText key={r.label} r={r} />)}
+          <div className="mx-auto mt-2 max-h-64 max-w-5xl space-y-2 overflow-y-auto">
+            {refs.map((r) => <VerseText key={r.label} r={r} version={version} />)}
           </div>
         )}
       </footer>
