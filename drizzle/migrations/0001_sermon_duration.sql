@@ -1,1 +1,0 @@
-ALTER TABLE public.sermons ADD COLUMN duration_minutes integer NOT NULL DEFAULT 40;
