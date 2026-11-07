@@ -6,6 +6,14 @@ describe("dicionário bíblico", () => {
   });
   it("busca sem acento e filtra por letra", () => {
     expect(searchDictionary("belem")[0]?.term).toBe("Belém");
-    expect(searchDictionary("", "lugar", "J").map((e) => e.term)).toEqual(["Jerusalém", "Jordão"]);
+    expect(searchDictionary("", "lugar", "J").map((e) => e.term)).toEqual(["Jericó", "Jerusalém", "Jordão"]);
+  });
+  it("acha por número Strong e transliteração", () => {
+    expect(searchDictionary("G3056")[0]?.term).toBe("Logos");
+    expect(searchDictionary("agape").map((e) => e.term)).toContain("Ágape");
+  });
+  it("verbetes relacionados existem no dicionário", () => {
+    const terms = new Set(BIBLE_DICTIONARY.map((e) => e.term));
+    for (const e of BIBLE_DICTIONARY) for (const r of e.related ?? []) expect(terms, `${e.term} → ${r}`).toContain(r);
   });
 });
