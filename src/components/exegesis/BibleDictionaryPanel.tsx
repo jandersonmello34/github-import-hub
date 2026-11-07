@@ -57,7 +57,7 @@ export function BibleDictionaryPanel() {
         <Button size="sm" variant={!testament ? "secondary" : "ghost"} onClick={() => setTestament(undefined)}>AT + NT</Button>
         <Button size="sm" variant={testament === "AT" ? "secondary" : "ghost"} onClick={() => setTestament("AT")}>Antigo Test.</Button>
         <Button size="sm" variant={testament === "NT" ? "secondary" : "ghost"} onClick={() => setTestament("NT")}>Novo Test.</Button>
-        <div className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">Versão <VersionSelect value={version} onChange={setVersion} /></div>
+        <div className="ml-auto flex items-center gap-2 text-xs text-muted-foreground"><VersionSelect value={version} onChange={setVersion} label="Versão dos versículos" /></div>
       </div>
       <div className="flex flex-wrap gap-1">
         <Button size="sm" variant={!letter ? "secondary" : "ghost"} onClick={() => setLetter(undefined)}>A–Z</Button>
