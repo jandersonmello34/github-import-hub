@@ -1,3 +1,4 @@
+import { EXTRA_ENTRIES } from "@/lib/bible-dictionary-extra";
 /**
  * Dicionário bíblico livre de direitos autorais.
  * Baseado em obras em domínio público: Easton's Bible Dictionary (1897),
@@ -5,7 +6,12 @@
  * Textos resumidos e traduzidos livremente para o português.
  */
 export type DictCategory = "nome" | "lugar" | "termo" | "objeto";
-export type DictEntry = { term: string; category: DictCategory; meaning?: string; definition: string; verses: string[]; source: "Easton" | "Hitchcock" | "Strong" };
+export type DictEntry = {
+  term: string; category: DictCategory; meaning?: string; definition: string; verses: string[];
+  source: "Easton" | "Hitchcock" | "Strong";
+  testament?: "AT" | "NT"; original?: string; transliteration?: string; strong?: string;
+  typology?: string; related?: string[];
+};
 
 export const DICT_SOURCES: Record<DictEntry["source"], string> = {
   Easton: "Easton's Bible Dictionary (1897) — domínio público",
@@ -13,7 +19,7 @@ export const DICT_SOURCES: Record<DictEntry["source"], string> = {
   Strong: "Strong's Concordance (1890) — domínio público",
 };
 
-export const BIBLE_DICTIONARY: DictEntry[] = [
+const BASE_ENTRIES: DictEntry[] = [
   { term: "Abraão", category: "nome", meaning: "pai de uma multidão", source: "Hitchcock", definition: "Patriarca chamado por Deus de Ur dos Caldeus; recebeu a promessa de uma descendência numerosa e de que nele seriam benditas todas as famílias da terra. Chamado 'amigo de Deus'.", verses: ["Gênesis 12:1-3", "Gênesis 17:5", "Romanos 4:3", "Tiago 2:23"] },
   { term: "Adão", category: "nome", meaning: "terra vermelha; homem", source: "Hitchcock", definition: "O primeiro homem, formado do pó da terra e colocado no Éden. Paulo o apresenta como figura daquele que havia de vir, Cristo.", verses: ["Gênesis 2:7", "Romanos 5:14", "1 Coríntios 15:45"] },
   { term: "Altar", category: "objeto", source: "Easton", definition: "Estrutura de terra, pedra ou metal onde se ofereciam sacrifícios. No tabernáculo havia o altar do holocausto (bronze) e o altar do incenso (ouro).", verses: ["Gênesis 8:20", "Êxodo 27:1", "Hebreus 13:10"] },
@@ -51,12 +57,17 @@ export const BIBLE_DICTIONARY: DictEntry[] = [
   { term: "Sião", category: "lugar", meaning: "monumento; lugar seco", source: "Hitchcock", definition: "Colina de Jerusalém, fortaleza conquistada por Davi; por extensão, a cidade de Deus e o seu povo.", verses: ["2 Samuel 5:7", "Salmos 48:2", "Hebreus 12:22"] },
 ];
 
+const extraTerms = new Set(EXTRA_ENTRIES.map((e) => e.term));
+export const BIBLE_DICTIONARY: DictEntry[] = [...BASE_ENTRIES.filter((e) => !extraTerms.has(e.term)), ...EXTRA_ENTRIES];
+export const findEntry = (term: string) => BIBLE_DICTIONARY.find((e) => e.term === term);
+
 const norm = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-export function searchDictionary(q: string, cat?: DictCategory | "todos", letter?: string): DictEntry[] {
+export function searchDictionary(q: string, cat?: DictCategory | "todos", letter?: string, testament?: "AT" | "NT"): DictEntry[] {
   const n = norm(q.trim());
   return BIBLE_DICTIONARY.filter((e) =>
     (!cat || cat === "todos" || e.category === cat) &&
+    (!testament || e.testament === testament) &&
     (!letter || norm(e.term).startsWith(norm(letter))) &&
-    (!n || norm(e.term).includes(n) || norm(e.meaning ?? "").includes(n) || norm(e.definition).includes(n)),
+    (!n || norm(e.term).includes(n) || norm(e.meaning ?? "").includes(n) || norm(e.definition).includes(n) || norm(e.transliteration ?? "").includes(n) || norm(e.strong ?? "") === n),
   ).sort((a, b) => a.term.localeCompare(b.term, "pt"));
 }
