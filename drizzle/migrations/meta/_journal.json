@@ -8,6 +8,13 @@
       "when": 1793997861577,
       "tag": "0000_kerigma_schema",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794283180455,
+      "tag": "0001_user_profiles_and_plans",
+      "breakpoints": true
     }
   ]
 }
