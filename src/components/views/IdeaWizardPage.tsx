@@ -212,6 +212,24 @@ export default function IdeaWizardPage() {
           </Card>
           <Card className="rounded-2xl border-border bg-card shadow-none">
             <CardContent className="space-y-3 p-5">
+              <h2 className="flex items-center gap-2 font-semibold"><Languages className="size-4 text-primary" /> Raízes Teológicas (Léxico Strong)</h2>
+              <p className="text-sm text-muted-foreground">Palavras-chave do texto no idioma original, com o código Strong correspondente.</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {dirs.originalKeywords.map((k) => (
+                  <div key={`${k.strongCode}-${k.word}`} className="rounded-xl border border-border bg-background p-4">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <span className="font-display text-xl leading-tight">{k.original}</span>
+                      <span className="shrink-0 rounded-full border border-border px-2 py-0.5 font-mono text-xs text-muted-foreground">{k.strongCode || "sem código"}</span>
+                    </div>
+                    <p className="mt-1 text-sm font-semibold text-primary">{k.word}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{k.meaning}</p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="rounded-2xl border-border bg-card shadow-none">
+            <CardContent className="space-y-3 p-5">
               <h2 className="font-semibold">Ângulo da mensagem</h2>
               <p className="text-sm text-muted-foreground">Escolha o ângulo que você quer seguir. São sugestões — a decisão é sua.</p>
               {dirs.angles.map((a, i) => (
