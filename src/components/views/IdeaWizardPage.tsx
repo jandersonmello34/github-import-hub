@@ -257,11 +257,16 @@ export default function IdeaWizardPage() {
           <Card className="rounded-2xl border-border bg-card shadow-none">
             <CardContent className="space-y-3 p-5">
               <h2 className="flex items-center gap-2 font-semibold"><FileText className="size-4 text-primary" /> Formato do sermão</h2>
-              <p className="text-sm text-muted-foreground">
-                Sugestão: <span className="text-primary">{FORMATS.find((f) => f.id === dirs.suggestedFormat)?.label}</span> — {dirs.formatReason}
-              </p>
+              <p className="text-sm text-muted-foreground">Escolha o formato. Você pode aceitar a sugestão automática ou definir um manualmente.</p>
+              <Choice highlight badge="IA" selected={autoFormat} onClick={() => setAutoFormat(true)}>
+                <span className="block font-semibold">Automático (Recomendado pela IA)</span>
+                <span className="mt-1 block text-sm text-muted-foreground">
+                  <span className="font-semibold text-primary">{FORMATS.find((f) => f.id === dirs.suggestedFormat)?.label}</span>
+                  {dirs.formatReason ? ` — ${dirs.formatReason}` : null}
+                </span>
+              </Choice>
               {FORMATS.map((f) => (
-                <Choice key={f.id} selected={format === f.id} onClick={() => setFormat(f.id)}>
+                <Choice key={f.id} selected={!autoFormat && format === f.id} onClick={() => { setAutoFormat(false); setManualFormat(f.id); }}>
                   <span className="block font-semibold">{f.label}</span>
                   <span className="mt-1 block text-sm text-muted-foreground">{f.desc}</span>
                 </Choice>
@@ -291,7 +296,7 @@ export default function IdeaWizardPage() {
           <div className="rounded-xl border border-border bg-card/60 p-4 text-sm">
             <p><span className="text-muted-foreground">Texto:</span> {passage || "livre"}</p>
             <p><span className="text-muted-foreground">Ângulo:</span> {angle !== null ? dirs?.angles[angle]?.title : "livre"}</p>
-            <p><span className="text-muted-foreground">Formato:</span> {FORMATS.find((f) => f.id === format)?.label}</p>
+            <p><span className="text-muted-foreground">Formato:</span> {FORMATS.find((f) => f.id === format)?.label}{autoFormat ? " (automático)" : null}</p>
           </div>
           <Button type="button" size="lg" className="h-12 w-full rounded-xl text-base font-semibold"
             disabled={!agreed || draftM.isPending} onClick={() => draftM.mutate()}>
