@@ -15,6 +15,13 @@
       "when": 1794283180455,
       "tag": "0001_user_profiles_and_plans",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794283298566,
+      "tag": "0002_restrict_profile_plan_grants",
+      "breakpoints": true
     }
   ]
 }
