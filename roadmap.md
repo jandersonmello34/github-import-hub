@@ -1,8 +1,8 @@
 # Kerigma — estudo e multiplicação
 ## Autenticação e perfis Free/Pro
-- [ ] Perfis com nome, foto, plano e créditos, protegidos contra auto-upgrade.
-- [ ] Login em português, menu da conta e acesso protegido em /sermons.
-- [ ] Verificar perfil, logout e redirecionamentos com sessão real.
+- [x] Perfis com nome, foto, plano e créditos, protegidos contra auto-upgrade.
+- [x] Login em português, menu da conta e acesso protegido em /sermons.
+- [x] Verificar perfil, logout e redirecionamentos com sessão real.
 - [ ] Contratação Pro e regra de créditos: aguardam preços, benefícios e regras do usuário.
 ## Correções do Modo Púlpito
 - [x] Sumário automático de pontos principais e texto com formatação rica.
