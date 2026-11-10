@@ -1,4 +1,5 @@
 import { SignOutButton } from "@/components/SignOutButton";
+import { ProfileMenu } from "@/components/ProfileMenu";
 import { cn } from "@/lib/utils";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { DictionaryPanel } from "@/components/exegesis/DictionaryPanel";
@@ -95,12 +96,12 @@ export function Layout({ children }: { children: ReactNode }) {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-20 flex h-16 items-center gap-4 border-b border-border bg-card/95 px-4 backdrop-blur md:px-8">
-          <span className="font-display text-lg font-semibold text-gradient-gold md:hidden">
+          <span className="shrink-0 font-display text-lg font-semibold text-gradient-gold md:hidden">
             Kerigma
           </span>
           <nav
             aria-label="Navegação principal"
-            className="flex flex-1 items-center gap-1 overflow-x-auto md:hidden"
+            className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto md:hidden"
           >
             {navItems.map((item) => (
               <NavLink key={item.to} item={item} />
@@ -118,9 +119,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <div className="mt-4"><DictionaryPanel /></div>
             </SheetContent>
           </Sheet>
-          <div className="ml-auto hidden items-center gap-3 md:flex">
-            <SignOutButton className="rounded-lg border border-border px-3 py-1.5 text-sm font-medium text-muted-foreground transition-smooth hover:border-primary/50 hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:opacity-60" />
-          </div>
+          <ProfileMenu />
         </header>
 
         <main className="atmosphere flex-1 px-4 py-6 md:px-8 md:py-8">

@@ -18,6 +18,7 @@ import { Route as AuthenticatedConfiguracoesRouteImport } from './routes/_authen
 import { Route as AuthenticatedDicionarioRouteImport } from './routes/_authenticated/dicionario'
 import { Route as AuthenticatedExegeseRouteImport } from './routes/_authenticated/exegese'
 import { Route as AuthenticatedProjecaoRouteImport } from './routes/_authenticated/projecao'
+import { Route as AuthenticatedSermonsRouteImport } from './routes/_authenticated/sermons'
 import { Route as AuthenticatedPulpitoSermonIdRouteImport } from './routes/_authenticated/pulpito.$sermonId'
 import { Route as AuthenticatedSermoesIndexRouteImport } from './routes/_authenticated/sermoes.index'
 import { Route as AuthenticatedSermoesSermonIdRouteImport } from './routes/_authenticated/sermoes.$sermonId'
@@ -68,6 +69,11 @@ const AuthenticatedProjecaoRoute = AuthenticatedProjecaoRouteImport.update({
   path: '/projecao',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSermonsRoute = AuthenticatedSermonsRouteImport.update({
+  id: '/sermons',
+  path: '/sermons',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPulpitoSermonIdRoute =
   AuthenticatedPulpitoSermonIdRouteImport.update({
     id: '/pulpito/$sermonId',
@@ -102,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/dicionario': typeof AuthenticatedDicionarioRoute
   '/exegese': typeof AuthenticatedExegeseRoute
   '/projecao': typeof AuthenticatedProjecaoRoute
+  '/sermons': typeof AuthenticatedSermonsRoute
   '/pulpito/$sermonId': typeof AuthenticatedPulpitoSermonIdRoute
   '/sermoes/$sermonId': typeof AuthenticatedSermoesSermonIdRoute
   '/sermoes/florescer': typeof AuthenticatedSermoesFlorescerRoute
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/dicionario': typeof AuthenticatedDicionarioRoute
   '/exegese': typeof AuthenticatedExegeseRoute
   '/projecao': typeof AuthenticatedProjecaoRoute
+  '/sermons': typeof AuthenticatedSermonsRoute
   '/pulpito/$sermonId': typeof AuthenticatedPulpitoSermonIdRoute
   '/sermoes/$sermonId': typeof AuthenticatedSermoesSermonIdRoute
   '/sermoes/florescer': typeof AuthenticatedSermoesFlorescerRoute
@@ -132,6 +140,7 @@ export interface FileRoutesById {
   '/_authenticated/dicionario': typeof AuthenticatedDicionarioRoute
   '/_authenticated/exegese': typeof AuthenticatedExegeseRoute
   '/_authenticated/projecao': typeof AuthenticatedProjecaoRoute
+  '/_authenticated/sermons': typeof AuthenticatedSermonsRoute
   '/_authenticated/pulpito/$sermonId': typeof AuthenticatedPulpitoSermonIdRoute
   '/_authenticated/sermoes/$sermonId': typeof AuthenticatedSermoesSermonIdRoute
   '/_authenticated/sermoes/florescer': typeof AuthenticatedSermoesFlorescerRoute
@@ -148,6 +157,7 @@ export interface FileRouteTypes {
     | '/dicionario'
     | '/exegese'
     | '/projecao'
+    | '/sermons'
     | '/pulpito/$sermonId'
     | '/sermoes/$sermonId'
     | '/sermoes/florescer'
@@ -162,6 +172,7 @@ export interface FileRouteTypes {
     | '/dicionario'
     | '/exegese'
     | '/projecao'
+    | '/sermons'
     | '/pulpito/$sermonId'
     | '/sermoes/$sermonId'
     | '/sermoes/florescer'
@@ -177,6 +188,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dicionario'
     | '/_authenticated/exegese'
     | '/_authenticated/projecao'
+    | '/_authenticated/sermons'
     | '/_authenticated/pulpito/$sermonId'
     | '/_authenticated/sermoes/$sermonId'
     | '/_authenticated/sermoes/florescer'
@@ -255,6 +267,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProjecaoRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/sermons': {
+      id: '/_authenticated/sermons'
+      path: '/sermons'
+      fullPath: '/sermons'
+      preLoaderRoute: typeof AuthenticatedSermonsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/pulpito/$sermonId': {
       id: '/_authenticated/pulpito/$sermonId'
       path: '/pulpito/$sermonId'
@@ -292,6 +311,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDicionarioRoute: typeof AuthenticatedDicionarioRoute
   AuthenticatedExegeseRoute: typeof AuthenticatedExegeseRoute
   AuthenticatedProjecaoRoute: typeof AuthenticatedProjecaoRoute
+  AuthenticatedSermonsRoute: typeof AuthenticatedSermonsRoute
   AuthenticatedPulpitoSermonIdRoute: typeof AuthenticatedPulpitoSermonIdRoute
   AuthenticatedSermoesSermonIdRoute: typeof AuthenticatedSermoesSermonIdRoute
   AuthenticatedSermoesFlorescerRoute: typeof AuthenticatedSermoesFlorescerRoute
@@ -304,6 +324,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDicionarioRoute: AuthenticatedDicionarioRoute,
   AuthenticatedExegeseRoute: AuthenticatedExegeseRoute,
   AuthenticatedProjecaoRoute: AuthenticatedProjecaoRoute,
+  AuthenticatedSermonsRoute: AuthenticatedSermonsRoute,
   AuthenticatedPulpitoSermonIdRoute: AuthenticatedPulpitoSermonIdRoute,
   AuthenticatedSermoesSermonIdRoute: AuthenticatedSermoesSermonIdRoute,
   AuthenticatedSermoesFlorescerRoute: AuthenticatedSermoesFlorescerRoute,

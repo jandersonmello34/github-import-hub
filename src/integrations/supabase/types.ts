@@ -56,6 +56,36 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          ai_credits: number
+          avatar_url: string
+          created_at: string
+          display_name: string
+          id: string
+          tier: string
+          updated_at: string
+        }
+        Insert: {
+          ai_credits?: number
+          avatar_url?: string
+          created_at?: string
+          display_name?: string
+          id: string
+          tier?: string
+          updated_at?: string
+        }
+        Update: {
+          ai_credits?: number
+          avatar_url?: string
+          created_at?: string
+          display_name?: string
+          id?: string
+          tier?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       sermons: {
         Row: {
           bible_reference: string
