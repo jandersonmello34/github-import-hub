@@ -7,12 +7,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateSermon } from "@/hooks/useSermons";
 import { exploreIdea, generateDraft } from "@/lib/ai-wizard.functions";
+import { resolveFormat } from "@/lib/sermon-format";
 import { type IdeaDirections, type IdeaInput, type SermonFormat, SermonStatus, withOriginalKeywords } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { AlertTriangle, ArrowLeft, ArrowRight, BookOpen, Check, ChevronRight, FileText, Languages, Loader2, Sprout, Wand2 } from "lucide-react";
+import { AlertTriangle, ArrowLeft, ArrowRight, BookOpen, Check, ChevronRight, FileText, Languages, Loader2, Sparkles, Sprout, Wand2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
