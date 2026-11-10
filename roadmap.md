@@ -1,5 +1,5 @@
 # Kerigma — estudo e multiplicação
-- [ ] Dicionário com reconhecimento de termos e estudo histórico-cultural.
+- [x] Dicionário com reconhecimento de termos e estudo histórico-cultural.
 - [ ] Comparação bíblica incluindo ARA e ARC verificadas.
 - [ ] Ilustrações, reflexão e aplicações de segunda a sábado.
 - [ ] Púlpito com temas, pontos concluídos e metas por seção.
@@ -17,3 +17,8 @@
 - [x] Tipo IdeaDirections com originalKeywords (palavra, grafia original, código Strong, significado).
 - [x] exploreIdea pedindo 3 a 5 palavras-chave no original com código Strong.
 - [x] Card "Raízes Teológicas (Léxico Strong)" no passo 2, com layout responsivo.
+
+## Formato do sermão — opção Automática
+- [x] Opção "Automático (Recomendado pela IA)" no topo, com badge IA e descrição dinâmica (formato sugerido + justificativa).
+- [x] Selecionada por padrão ao abrir o passo 2; format assume dirs.suggestedFormat.
+- [x] Troca manual para os 4 formatos continua livre.
