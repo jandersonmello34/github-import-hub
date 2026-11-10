@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { GLOSSARY } from "@/lib/glossary";
-import { DICTIONARY } from "@/lib/bible-dictionary";
+import { BIBLE_DICTIONARY } from "@/lib/bible-dictionary";
 import type { QueryClient } from "@tanstack/react-query";
 
 export const strongTermSchema = z.object({
@@ -17,7 +17,7 @@ export const normalizeStrongQuery = (s: string) => s.normalize("NFD").replace(/\
 
 const localEntries = [
   ...GLOSSARY.map((e) => ({ ...e, notes: "" })),
-  ...DICTIONARY.map((e) => ({ ...e, notes: e.typology ?? "" })),
+  ...BIBLE_DICTIONARY.map((e) => ({ ...e, notes: e.typology ?? "" })),
 ].filter((e) => e.strong && e.original && e.transliteration);
 
 export function findLocalStrongTerm(query: string): StrongTerm | undefined {

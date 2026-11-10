@@ -34,4 +34,5 @@ use the editor.
 - Holyrics credentials are stored per user in `holyrics_configs` (original app stored one global config).
 - AI calls share `src/lib/ai-gateway.server.ts` (`runChat`/`runJson` with strict json_schema); wizard and import live in `src/lib/ai-wizard.functions.ts` — one gateway client, structured replies.
 - Bible text is fetched in the browser and cached forever by React Query — no server storage or key needed. NVI/ACF/AA come as whole-Bible JSON from thiagobodruk/biblia; NAA/NVT/NTLH/OL/KJA are fetched per chapter from the public bolls.life API (see src/lib/bible.ts).
+- Strong lookups use exact local lexical matches first, then authenticated SDK-backed lookupStrongTerm; React Query caches validated entries and aliases for the current session to avoid duplicate AI calls, and generated answers remain labeled unverified.
 
