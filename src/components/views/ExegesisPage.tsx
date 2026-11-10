@@ -1,6 +1,7 @@
 import { ContextPanel } from "@/components/exegesis/ContextPanel";
 import { BibleDictionaryPanel } from "@/components/exegesis/BibleDictionaryPanel";
 import { DictionaryPanel } from "@/components/exegesis/DictionaryPanel";
+import { StrongPanel } from "@/components/exegesis/StrongPanel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function ExegesisPage() {
@@ -14,10 +15,12 @@ export default function ExegesisPage() {
         <TabsList className="flex-wrap h-auto">
           <TabsTrigger value="dicionario">Dicionário teológico</TabsTrigger>
           <TabsTrigger value="biblico">Dicionário bíblico</TabsTrigger>
+          <TabsTrigger value="strong">Léxico Strong</TabsTrigger>
           <TabsTrigger value="contexto">Contexto histórico-cultural</TabsTrigger>
         </TabsList>
         <TabsContent value="dicionario" className="mt-4"><DictionaryPanel /></TabsContent>
         <TabsContent value="biblico" className="mt-4"><BibleDictionaryPanel /></TabsContent>
+        <TabsContent value="strong" className="mt-4"><StrongPanel /></TabsContent>
         <TabsContent value="contexto" className="mt-4"><ContextPanel /></TabsContent>
       </Tabs>
     </div>

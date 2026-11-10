@@ -22,3 +22,8 @@
 - [x] Opção "Automático (Recomendado pela IA)" no topo, com badge IA e descrição dinâmica (formato sugerido + justificativa).
 - [x] Selecionada por padrão ao abrir o passo 2; format assume dirs.suggestedFormat.
 - [x] Troca manual para os 4 formatos continua livre.
+
+## Dicionário — consulta Strong sob demanda
+- [x] Priorizar verbetes locais e buscar ausentes com lookupStrongTerm autenticada.
+- [x] Exibir os campos lexicais, carregamento e cache de consultas repetidas.
+- [x] Testar prioridades, cache e consulta autenticada na tela.
