@@ -1,5 +1,6 @@
 import { BibleDictionaryPanel } from "@/components/exegesis/BibleDictionaryPanel";
 import { DictionaryPanel } from "@/components/exegesis/DictionaryPanel";
+import { StrongPanel } from "@/components/exegesis/StrongPanel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -28,9 +29,11 @@ function DictionaryPage() {
         <TabsList className="flex-wrap h-auto">
           <TabsTrigger value="biblico">Dicionário bíblico</TabsTrigger>
           <TabsTrigger value="teologico">Dicionário teológico</TabsTrigger>
+          <TabsTrigger value="strong">Léxico Strong</TabsTrigger>
         </TabsList>
         <TabsContent value="biblico" className="mt-4"><BibleDictionaryPanel /></TabsContent>
         <TabsContent value="teologico" className="mt-4"><DictionaryPanel /></TabsContent>
+        <TabsContent value="strong" className="mt-4"><StrongPanel /></TabsContent>
       </Tabs>
     </div>
   );
