@@ -51,7 +51,7 @@ function Steps({ step }: { step: number }) {
   );
 }
 
-function Choice({ selected, onClick, children }: { selected: boolean; onClick: () => void; children: React.ReactNode }) {
+function Choice({ selected, onClick, badge, highlight, children }: { selected: boolean; onClick: () => void; badge?: string; highlight?: boolean; children: React.ReactNode }) {
   return (
     <button
       type="button"
@@ -60,12 +60,18 @@ function Choice({ selected, onClick, children }: { selected: boolean; onClick: (
       className={cn(
         "flex w-full items-start gap-3 rounded-xl border bg-background p-4 text-left transition-smooth hover:border-primary/50",
         selected ? "border-primary bg-primary/10" : "border-border",
+        highlight && !selected ? "border-primary/40 bg-primary/5" : null,
       )}
     >
       <span className={cn("mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border", selected ? "border-primary bg-primary text-primary-foreground" : "border-muted-foreground/50")}>
         {selected ? <Check className="size-3" /> : null}
       </span>
       <span className="min-w-0 flex-1">{children}</span>
+      {badge ? (
+        <span className="mt-0.5 inline-flex shrink-0 items-center gap-1 rounded-full border border-primary/40 bg-primary/10 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wider text-primary">
+          <Sparkles className="size-3" />{badge}
+        </span>
+      ) : null}
     </button>
   );
 }
@@ -78,19 +84,25 @@ export default function IdeaWizardPage() {
   const [dirs, setDirs] = useState<IdeaDirections | null>(null);
   const [passage, setPassage] = useState("");
   const [angle, setAngle] = useState<number | null>(null);
-  const [format, setFormat] = useState<SermonFormat>("tematico");
+  const [autoFormat, setAutoFormat] = useState(true);
+  const [manualFormat, setManualFormat] = useState<SermonFormat>("tematico");
   const [agreed, setAgreed] = useState(false);
 
   const explore = useServerFn(exploreIdea);
   const draft = useServerFn(generateDraft);
   const createSermon = useCreateSermon();
 
+  /** "Automático" follows the AI's suggestion; a manual pick overrides it. */
+  const format: SermonFormat = dirs
+    ? resolveFormat({ auto: autoFormat, manual: manualFormat, suggested: dirs.suggestedFormat })
+    : manualFormat;
+
   const exploreM = useMutation({
     mutationFn: () => explore({ data: input }),
     onSuccess: (d) => {
       setDirs(withOriginalKeywords(d));
       setPassage(input.passage || d.passages[0]?.reference || "");
-      setFormat(d.suggestedFormat);
+      setAutoFormat(true);
       setAngle(null);
       setStep(2);
     },
