@@ -48,6 +48,11 @@ export type IdeaDirections = {
 };
 export type SermonDraft = { title: string; theme: string; bibleReference: string; body: string };
 
+/** Keeps the original-language keywords usable even when the AI reply omits the field. */
+export function withOriginalKeywords(d: IdeaDirections): IdeaDirections {
+  return { ...d, originalKeywords: Array.isArray(d.originalKeywords) ? d.originalKeywords : [] };
+}
+
 export type HolyricsConfig = { apiKey: string; serverToken: string };
 export type HolyricsImage = { id: string; name: string; thumbnail: string };
 export type ProjectionState = { itemName: string; slideNumber: number };
