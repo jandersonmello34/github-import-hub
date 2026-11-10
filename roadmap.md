@@ -1,7 +1,7 @@
 # Kerigma — estudo e multiplicação
 ## Correções do Modo Púlpito
-- [ ] Sumário automático de pontos principais e texto com formatação rica.
-- [ ] Cores fixas do cronômetro, inclusive pausado, com testes e conferência na tela.
+- [x] Sumário automático de pontos principais e texto com formatação rica.
+- [x] Cores fixas do cronômetro, inclusive pausado, com testes e conferência na tela.
 
 - [x] Dicionário com reconhecimento de termos e estudo histórico-cultural.
 - [ ] Comparação bíblica incluindo ARA e ARC verificadas.
