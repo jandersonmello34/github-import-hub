@@ -2,6 +2,7 @@
 ## Correções do Modo Púlpito
 - [x] Sumário automático de pontos principais e texto com formatação rica.
 - [x] Cores fixas do cronômetro, inclusive pausado, com testes e conferência na tela.
+- [x] Navegação no rodapé (sem botões flutuantes), texto em largura total e deslize por toque.
 
 - [x] Dicionário com reconhecimento de termos e estudo histórico-cultural.
 - [ ] Comparação bíblica incluindo ARA e ARC verificadas.
