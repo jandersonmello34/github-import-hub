@@ -1,20 +1,37 @@
 import { BOOK_NAMES } from "@/lib/bible";
 
-export type SermonPage = { heading: string; content: string };
+export type SermonPage = { heading: string; content: string; level?: number; overview?: string[] };
 
 /** Splits the sermon body into one page per topic (Markdown heading `#`..`###`). */
 export function splitTopics(body: string): SermonPage[] {
   const pages: SermonPage[] = [];
   let cur: SermonPage = { heading: "", content: "" };
   for (const line of body.split("\n")) {
-    const m = /^\s{0,3}#{1,3}\s+(.+?)\s*#*\s*$/.exec(line);
+    const m = /^\s{0,3}(#{1,6})\s+(.+?)\s*#*\s*$/.exec(line);
     if (m) {
       if (cur.heading || cur.content.trim()) pages.push(cur);
-      cur = { heading: (m[1] ?? "").replace(/\*\*/g, ""), content: "" };
+      cur = { heading: (m[2] ?? "").replace(/\*\*/g, ""), level: m[1]?.length ?? 2, content: "" };
     } else cur.content += `${line}\n`;
   }
   if (cur.heading || cur.content.trim()) pages.push(cur);
-  return pages.map((p) => ({ ...p, content: p.content.trim() }));
+  return pages.map((p, index) => {
+    if (!isMainPointsHeading(p.heading)) return { ...p, content: p.content.trim() };
+    const following: SermonPage[] = [];
+    for (const next of pages.slice(index + 1)) {
+      if (/^(conclusao|introducao|apelo|aplicacao|oracao|encerramento|resumo|referencias)\b/.test(norm(next.heading))) break;
+      if ((next.level ?? 2) < (p.level ?? 2)) break;
+      if (isMainPointsHeading(next.heading)) break;
+      following.push(next);
+    }
+    const topicLevel = Math.min(...following.map((next) => next.level ?? 2));
+    const overview = following.filter((next) => (next.level ?? 2) === topicLevel).map((next) =>
+      next.heading.replace(/^\s*(?:(?:ponto|topico)\s*)?\d+\s*[.):\-–]\s*/i, "").trim());
+    return { ...p, content: p.content.trim(), overview };
+  });
+}
+
+export function isMainPointsHeading(heading: string): boolean {
+  return norm(heading).replace(/^\d+[.)]\s*/, "").replace(/[:.]$/, "").trim() === "pontos principais";
 }
 
 export type VerseRef = { label: string; book: number; chapter: number; from: number; to: number };

@@ -8,6 +8,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { type BibleVersion, useBibleChapter } from "@/lib/bible";
 import { VersionSelect } from "@/components/bible/ChapterReader";
 import { findReferences, splitTopics, type VerseRef } from "@/lib/sermon-pages";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 function VerseText({ r, version }: { r: VerseRef; version: BibleVersion }) {
   const [open, setOpen] = useState(true);
@@ -15,11 +17,11 @@ function VerseText({ r, version }: { r: VerseRef; version: BibleVersion }) {
   const text = data?.slice(r.from - 1, r.to).map((v, i) => `${r.from + i} ${v}`).join(" ");
   return (
     <div className="rounded-md border border-border bg-background/60">
-      <button type="button" aria-expanded={open} onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm font-semibold text-primary hover:bg-primary/10">
+      <Button type="button" variant="ghost" aria-expanded={open} onClick={() => setOpen((o) => !o)}
+        className="h-auto w-full justify-start gap-2 whitespace-normal px-3 py-1.5 text-left text-sm font-semibold text-primary">
         <ChevronDown className={cn("size-4 transition-transform", !open && "-rotate-90")} />
         {r.label}
-      </button>
+      </Button>
       {open && (
         <p className="px-3 pb-2 text-sm leading-relaxed">
           {isLoading ? "Carregando…" : isError ? "Não foi possível carregar esta versão." : text || "Versículo não encontrado."}
@@ -38,9 +40,9 @@ const borderClass: Record<TimerAlert, string> = {
 
 const clockClass: Record<TimerAlert, string> = {
   normal: "text-foreground",
-  warning: "text-[var(--pulpit-orange)]",
-  critical: "text-destructive",
-  over: "text-destructive",
+  warning: "text-pulpit-warning",
+  critical: "text-pulpit-critical",
+  over: "text-pulpit-critical",
 };
 
 export default function PulpitPage() {
@@ -95,7 +97,7 @@ export default function PulpitPage() {
   }, [running]);
 
   const remaining = total - elapsed;
-  const level: TimerAlert = elapsed > 0 || running ? alertLevel(remaining) : "normal";
+  const level: TimerAlert = alertLevel(remaining);
   const progress = Math.min(100, (elapsed / total) * 100);
 
   if (isLoading) {
@@ -115,7 +117,7 @@ export default function PulpitPage() {
             onClick={() => void navigate({ to: "/sermoes/$sermonId", params: { sermonId } })}>
             <ArrowLeft className="size-5" />
           </Button>
-          <div className={cn("font-mono text-4xl font-bold tabular-nums sm:text-5xl", clockClass[level], level === "critical" && "animate-pulse")}
+          <div className={cn("font-mono text-4xl font-bold tabular-nums sm:text-5xl", clockClass[level])}
             role="timer" aria-live="off">
             {formatClock(remaining)}
           </div>
@@ -141,11 +143,11 @@ export default function PulpitPage() {
           </div>
         </div>
         <div className="mx-auto mt-2 h-1.5 max-w-5xl overflow-hidden rounded-full bg-muted">
-          <div className={cn("h-full transition-all", level === "normal" ? "bg-primary" : level === "warning" ? "bg-[var(--pulpit-orange)]" : "bg-destructive")}
+          <div className={cn("h-full transition-all", level === "normal" ? "bg-primary" : level === "warning" ? "bg-pulpit-warning" : "bg-pulpit-critical")}
             style={{ width: `${progress}%` }} />
         </div>
         <p className="mx-auto mt-1 max-w-5xl text-xs text-muted-foreground">
-          {level === "over" ? "Tempo esgotado" : level === "critical" ? "Faltam menos de 5 minutos — conclua" : level === "warning" ? "Faltam menos de 10 minutos" : `Tempo previsto: ${Math.round(total / 60)} min`}
+          {level === "over" ? "Tempo esgotado" : level === "critical" ? "5 minutos ou menos — conclua" : level === "warning" ? "10 minutos ou menos" : `Tempo previsto: ${Math.round(total / 60)} min`}
         </p>
       </header>
 
@@ -154,8 +156,12 @@ export default function PulpitPage() {
           {page === 0 && <h1 className="font-display text-3xl font-semibold">{sermon.title}</h1>}
           {page === 0 && sermon.bibleReference && <p className="mt-1 text-primary">{sermon.bibleReference}</p>}
           {current?.heading && <h2 className="mt-4 font-display text-2xl font-semibold text-primary">{current.heading}</h2>}
-          <div className="mt-6 whitespace-pre-wrap leading-relaxed" style={{ fontSize }}>
-            {current ? current.content : "Este sermão ainda não tem conteúdo."}
+          <div className="pulpit-prose mt-6 break-words leading-relaxed" style={{ fontSize }}>
+            {current?.overview && current.overview.length > 0 ? (
+              <ol className="pulpit-overview" aria-label="Visão geral da mensagem">
+                {current.overview.map((title, index) => <li key={`${index}-${title}`}><ReactMarkdown>{title}</ReactMarkdown></li>)}
+              </ol>
+            ) : <ReactMarkdown remarkPlugins={[remarkGfm]} skipHtml>{current?.content || "Este sermão ainda não tem conteúdo."}</ReactMarkdown>}
           </div>
         </article>
       </main>
