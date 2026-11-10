@@ -24,6 +24,6 @@
 - [x] Troca manual para os 4 formatos continua livre.
 
 ## Dicionário — consulta Strong sob demanda
-- [ ] Priorizar verbetes locais e buscar ausentes com lookupStrongTerm autenticada.
-- [ ] Exibir os campos lexicais, carregamento e cache de consultas repetidas.
-- [ ] Testar prioridades, cache e consulta autenticada na tela.
+- [x] Priorizar verbetes locais e buscar ausentes com lookupStrongTerm autenticada.
+- [x] Exibir os campos lexicais, carregamento e cache de consultas repetidas.
+- [x] Testar prioridades, cache e consulta autenticada na tela.
