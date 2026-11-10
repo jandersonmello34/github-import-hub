@@ -9,5 +9,6 @@
 - [ ] Testes autenticados e revisão final.
 
 ## Atualização solicitada da branch main
+- [x] Baixar a versão atual e comparar todo o código.
 - [x] Conferir dependências e executar os 10 testes.
 - [x] Verificar sermões autenticados (criar, ler, editar e excluir), púlpito e demais páginas.
