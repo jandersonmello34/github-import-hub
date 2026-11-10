@@ -7,12 +7,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateSermon } from "@/hooks/useSermons";
 import { exploreIdea, generateDraft } from "@/lib/ai-wizard.functions";
+import { resolveFormat } from "@/lib/sermon-format";
 import { type IdeaDirections, type IdeaInput, type SermonFormat, SermonStatus, withOriginalKeywords } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { AlertTriangle, ArrowLeft, ArrowRight, BookOpen, Check, ChevronRight, FileText, Languages, Loader2, Sprout, Wand2 } from "lucide-react";
+import { AlertTriangle, ArrowLeft, ArrowRight, BookOpen, Check, ChevronRight, FileText, Languages, Loader2, Sparkles, Sprout, Wand2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -50,7 +51,7 @@ function Steps({ step }: { step: number }) {
   );
 }
 
-function Choice({ selected, onClick, children }: { selected: boolean; onClick: () => void; children: React.ReactNode }) {
+function Choice({ selected, onClick, badge, highlight, children }: { selected: boolean; onClick: () => void; badge?: string; highlight?: boolean; children: React.ReactNode }) {
   return (
     <button
       type="button"
@@ -59,12 +60,18 @@ function Choice({ selected, onClick, children }: { selected: boolean; onClick: (
       className={cn(
         "flex w-full items-start gap-3 rounded-xl border bg-background p-4 text-left transition-smooth hover:border-primary/50",
         selected ? "border-primary bg-primary/10" : "border-border",
+        highlight && !selected ? "border-primary/40 bg-primary/5" : null,
       )}
     >
       <span className={cn("mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border", selected ? "border-primary bg-primary text-primary-foreground" : "border-muted-foreground/50")}>
         {selected ? <Check className="size-3" /> : null}
       </span>
       <span className="min-w-0 flex-1">{children}</span>
+      {badge ? (
+        <span className="mt-0.5 inline-flex shrink-0 items-center gap-1 rounded-full border border-primary/40 bg-primary/10 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wider text-primary">
+          <Sparkles className="size-3" />{badge}
+        </span>
+      ) : null}
     </button>
   );
 }
@@ -77,19 +84,25 @@ export default function IdeaWizardPage() {
   const [dirs, setDirs] = useState<IdeaDirections | null>(null);
   const [passage, setPassage] = useState("");
   const [angle, setAngle] = useState<number | null>(null);
-  const [format, setFormat] = useState<SermonFormat>("tematico");
+  const [autoFormat, setAutoFormat] = useState(true);
+  const [manualFormat, setManualFormat] = useState<SermonFormat>("tematico");
   const [agreed, setAgreed] = useState(false);
 
   const explore = useServerFn(exploreIdea);
   const draft = useServerFn(generateDraft);
   const createSermon = useCreateSermon();
 
+  /** "Automático" follows the AI's suggestion; a manual pick overrides it. */
+  const format: SermonFormat = dirs
+    ? resolveFormat({ auto: autoFormat, manual: manualFormat, suggested: dirs.suggestedFormat })
+    : manualFormat;
+
   const exploreM = useMutation({
     mutationFn: () => explore({ data: input }),
     onSuccess: (d) => {
       setDirs(withOriginalKeywords(d));
       setPassage(input.passage || d.passages[0]?.reference || "");
-      setFormat(d.suggestedFormat);
+      setAutoFormat(true);
       setAngle(null);
       setStep(2);
     },
@@ -244,11 +257,16 @@ export default function IdeaWizardPage() {
           <Card className="rounded-2xl border-border bg-card shadow-none">
             <CardContent className="space-y-3 p-5">
               <h2 className="flex items-center gap-2 font-semibold"><FileText className="size-4 text-primary" /> Formato do sermão</h2>
-              <p className="text-sm text-muted-foreground">
-                Sugestão: <span className="text-primary">{FORMATS.find((f) => f.id === dirs.suggestedFormat)?.label}</span> — {dirs.formatReason}
-              </p>
+              <p className="text-sm text-muted-foreground">Escolha o formato. Você pode aceitar a sugestão automática ou definir um manualmente.</p>
+              <Choice highlight badge="IA" selected={autoFormat} onClick={() => setAutoFormat(true)}>
+                <span className="block font-semibold">Automático (Recomendado pela IA)</span>
+                <span className="mt-1 block text-sm text-muted-foreground">
+                  <span className="font-semibold text-primary">{FORMATS.find((f) => f.id === dirs.suggestedFormat)?.label}</span>
+                  {dirs.formatReason ? ` — ${dirs.formatReason}` : null}
+                </span>
+              </Choice>
               {FORMATS.map((f) => (
-                <Choice key={f.id} selected={format === f.id} onClick={() => setFormat(f.id)}>
+                <Choice key={f.id} selected={!autoFormat && format === f.id} onClick={() => { setAutoFormat(false); setManualFormat(f.id); }}>
                   <span className="block font-semibold">{f.label}</span>
                   <span className="mt-1 block text-sm text-muted-foreground">{f.desc}</span>
                 </Choice>
@@ -278,7 +296,7 @@ export default function IdeaWizardPage() {
           <div className="rounded-xl border border-border bg-card/60 p-4 text-sm">
             <p><span className="text-muted-foreground">Texto:</span> {passage || "livre"}</p>
             <p><span className="text-muted-foreground">Ângulo:</span> {angle !== null ? dirs?.angles[angle]?.title : "livre"}</p>
-            <p><span className="text-muted-foreground">Formato:</span> {FORMATS.find((f) => f.id === format)?.label}</p>
+            <p><span className="text-muted-foreground">Formato:</span> {FORMATS.find((f) => f.id === format)?.label}{autoFormat ? " (automático)" : null}</p>
           </div>
           <Button type="button" size="lg" className="h-12 w-full rounded-xl text-base font-semibold"
             disabled={!agreed || draftM.isPending} onClick={() => draftM.mutate()}>
