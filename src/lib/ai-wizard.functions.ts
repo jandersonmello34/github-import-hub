@@ -53,12 +53,18 @@ export const exploreIdea = createServerFn({ method: "POST" })
       "- context: um parágrafo sobre o contexto histórico e literário da passagem (ou do tema, se não houver passagem).\n" +
       "- relatedVerses: 3 a 5 versículos relacionados com uma nota curta.\n" +
       "- angles: 4 ângulos possíveis, cada um com título curto, tese de uma frase e base bíblica/observação.\n" +
+      "- originalKeywords: identifique de 3 a 5 palavras-chave fundamentais do texto bíblico no idioma original " +
+      "(hebraico para o Antigo Testamento, grego para o Novo Testamento). Para cada uma informe: word (transliteração " +
+      "legível, ex.: \"Shalom\", \"Agape\", \"Hesed\"), original (grafia no alfabeto original, ex.: שלום, ἀγάπη), " +
+      "strongCode (o código Strong, ex.: \"H7965\", \"G26\") e meaning (significado exegético resumido no contexto do texto). " +
+      "Só informe um código Strong se tiver certeza dele; se não souber, deixe o campo vazio e explique no meaning.\n" +
       "- suggestedFormat: um de expositivo, textual, tematico, biografico; e formatReason explicando a sugestão.";
     return runJson<IdeaDirections>(prompt, "idea_directions", obj({
       passages: arr(obj({ reference: str, reason: str })),
       context: str,
       relatedVerses: arr(obj({ reference: str, note: str })),
       angles: arr(obj({ title: str, thesis: str, basis: str })),
+      originalKeywords: arr(obj({ word: str, original: str, strongCode: str, meaning: str })),
       suggestedFormat: { type: "string", enum: ["expositivo", "textual", "tematico", "biografico"] },
       formatReason: str,
     }));

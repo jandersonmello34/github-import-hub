@@ -7,12 +7,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateSermon } from "@/hooks/useSermons";
 import { exploreIdea, generateDraft } from "@/lib/ai-wizard.functions";
-import { type IdeaDirections, type IdeaInput, type SermonFormat, SermonStatus } from "@/lib/types";
+import { type IdeaDirections, type IdeaInput, type SermonFormat, SermonStatus, withOriginalKeywords } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { AlertTriangle, ArrowLeft, ArrowRight, BookOpen, Check, ChevronRight, FileText, Loader2, Sprout, Wand2 } from "lucide-react";
+import { AlertTriangle, ArrowLeft, ArrowRight, BookOpen, Check, ChevronRight, FileText, Languages, Loader2, Sprout, Wand2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -87,7 +87,7 @@ export default function IdeaWizardPage() {
   const exploreM = useMutation({
     mutationFn: () => explore({ data: input }),
     onSuccess: (d) => {
-      setDirs(d);
+      setDirs(withOriginalKeywords(d));
       setPassage(input.passage || d.passages[0]?.reference || "");
       setFormat(d.suggestedFormat);
       setAngle(null);
@@ -208,6 +208,24 @@ export default function IdeaWizardPage() {
                   </div>
                 ))}
               </dl>
+            </CardContent>
+          </Card>
+          <Card className="rounded-2xl border-border bg-card shadow-none">
+            <CardContent className="space-y-3 p-5">
+              <h2 className="flex items-center gap-2 font-semibold"><Languages className="size-4 text-primary" /> Raízes Teológicas (Léxico Strong)</h2>
+              <p className="text-sm text-muted-foreground">Palavras-chave do texto no idioma original, com o código Strong correspondente.</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {dirs.originalKeywords.map((k) => (
+                  <div key={`${k.strongCode}-${k.word}`} className="rounded-xl border border-border bg-background p-4">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <span className="font-display text-xl leading-tight">{k.original}</span>
+                      <span className="shrink-0 rounded-full border border-border px-2 py-0.5 font-mono text-xs text-muted-foreground">{k.strongCode || "sem código"}</span>
+                    </div>
+                    <p className="mt-1 text-sm font-semibold text-primary">{k.word}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{k.meaning}</p>
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
           <Card className="rounded-2xl border-border bg-card shadow-none">

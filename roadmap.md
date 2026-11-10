@@ -12,3 +12,8 @@
 - [x] Baixar a versão atual e comparar todo o código.
 - [x] Conferir dependências e executar os 10 testes.
 - [x] Verificar sermões autenticados (criar, ler, editar e excluir), púlpito e demais páginas.
+
+## Assistente de ideias — Léxico Strong
+- [x] Tipo IdeaDirections com originalKeywords (palavra, grafia original, código Strong, significado).
+- [x] exploreIdea pedindo 3 a 5 palavras-chave no original com código Strong.
+- [x] Card "Raízes Teológicas (Léxico Strong)" no passo 2, com layout responsivo.

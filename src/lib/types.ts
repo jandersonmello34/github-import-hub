@@ -30,6 +30,13 @@ export type ReferenceSuggestion = { reference: string; reason: string };
 
 export type IdeaInput = { idea: string; passage: string; occasion: string; duration: string };
 export type SermonFormat = "expositivo" | "textual" | "tematico" | "biografico";
+export type OriginalKeyword = {
+  word: string;
+  original: string;
+  strongCode: string;
+  meaning: string;
+};
+
 export type IdeaDirections = {
   passages: { reference: string; reason: string }[];
   context: string;
@@ -37,8 +44,14 @@ export type IdeaDirections = {
   angles: { title: string; thesis: string; basis: string }[];
   suggestedFormat: SermonFormat;
   formatReason: string;
+  originalKeywords: OriginalKeyword[];
 };
 export type SermonDraft = { title: string; theme: string; bibleReference: string; body: string };
+
+/** Keeps the original-language keywords usable even when the AI reply omits the field. */
+export function withOriginalKeywords(d: IdeaDirections): IdeaDirections {
+  return { ...d, originalKeywords: Array.isArray(d.originalKeywords) ? d.originalKeywords : [] };
+}
 
 export type HolyricsConfig = { apiKey: string; serverToken: string };
 export type HolyricsImage = { id: string; name: string; thumbnail: string };
